@@ -1,15 +1,52 @@
 import { css } from "@emotion/css";
+import { useEffect, useState } from "react";
 
-export default function Home() {
+import { Book, Review } from "../mocks/types";
+
+type Props = {
+  book: Book;
+};
+
+export default function Home({ book }: Props) {
+  const [reviews, setReviews] = useState<Review[] | null>(null);
+
+  const handleGetReviews = () => {
+    // Client-side request are mocked by `mocks/browser.ts`.
+    fetch("/reviews")
+      .then((res) => res.json())
+      .then(setReviews);
+  };
+
+  useEffect(() => {});
+
   return (
-    <main>
-      <h1
-        className={css`
-          color: blue;
-        `}
-      >
-        테스트가 잘 됩니까?
-      </h1>
-    </main>
+    <div>
+      <img src={book.imageUrl} alt={book.title} width="250" />
+      <h1>{book.title}</h1>
+      <p>{book.description}</p>
+      <button onClick={handleGetReviews}>Load reviews</button>
+      {reviews && (
+        <ul>
+          {reviews.map((review) => (
+            <li key={review.id}>
+              <p>{review.text}</p>
+              <p>{review.author}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
+}
+
+export async function getServerSideProps() {
+  // Server-side requests are mocked by `mocks/server.ts`.
+  const res = await fetch("https://my.backend/book");
+  const book = await res.json();
+
+  return {
+    props: {
+      book,
+    },
+  };
 }
