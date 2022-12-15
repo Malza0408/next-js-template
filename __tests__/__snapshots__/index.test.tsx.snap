@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home renders a heading 1`] = `
+.emotion-0 {
+  color: blue;
+}
+
+<div>
+  <main>
+    <h1
+      class="emotion-0"
+    >
+      테스트가 잘 됩니까?
+    </h1>
+  </main>
+</div>
+`;
